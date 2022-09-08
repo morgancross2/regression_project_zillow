@@ -34,11 +34,8 @@ def acquire_zillow():
                         taxvaluedollarcnt,
                         yearbuilt,
                         regionidzip,
-                        rawcensustractandblock,
                         latitude,
-                        longitude,
-                        garagecarcnt,
-                        poolcnt
+                        longitude
                 FROM properties_2017
                 JOIN predictions_2017
                     USING (parcelid)
@@ -54,11 +51,8 @@ def acquire_zillow():
 def prepare_zillow(df):        
     # Prepare
     # rename columns
-    df.columns = ['baths', 'beds', 'area', 'city', 'lot_size', 'value', 'year_built', 'zipcode', 'census_info', 'lat', 'long', 'garage', 'pool']
-    
-    df.poolcnt = np.where(df.pool.isnull(), 0, 1)
-    df.garage = df.garage.fillna(1)
-    
+    df.columns = ['baths', 'beds', 'area', 'city', 'lot_size', 'value', 'year_built', 'zipcode', 'lat', 'long']
+        
     # remove outliers
     df = df.dropna()
 
@@ -69,7 +63,7 @@ def prepare_zillow(df):
     df = pd.concat([df, dummies], axis=1)
     df = df.drop(columns='city')
     
-    df.columns = ['baths', 'beds', 'area', 'lot_size', 'value', 'year_built', 'zipcode', 'census_info', 'lat', 'long', 'garage', 'pool', 'location', 'los_angeles', 'orange', 'ventura']
+    df.columns = ['baths', 'beds', 'area', 'lot_size', 'value', 'year_built', 'zipcode', 'lat', 'long', 'location', 'los_angeles', 'orange', 'ventura']
     df.los_angeles = df.los_angeles.astype(int)
     df.orange = df.orange.astype(int)
     df.ventura = df.ventura.astype(int)
@@ -95,12 +89,8 @@ def prepare_zillow(df):
     df['half_bath'] = df.half_bath.map({True:1,
                                         False:0})
     # drop the one weird zipcode 
-    # df = df.drop(index=26047)
+    df = df.drop(index=26047)
     
-    hold = df.census_info.astype(str).str.split('.', expand=True)
-    df['census_tract'] = hold[0].astype(int)
-    df['census_block'] = hold[1].astype(int)
-    df = df.drop(columns='census_info')
     
     return df
 

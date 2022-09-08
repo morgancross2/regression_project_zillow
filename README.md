@@ -1,7 +1,7 @@
 # Zillow Regression Project
 by: Morgan Cross
 
-This project is designed to identify key features and built a regression model that best predicts home cost. 
+This project is designed to identify key features and build a regression model that best predicts home cost. 
 
 -----
 ## Project Overview:
