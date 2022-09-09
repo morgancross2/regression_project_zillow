@@ -60,14 +60,19 @@ Recommendations:
 | baths | float | Count of bathrooms in the home |
 | beds | float | Count of bedrooms in the home |
 | decade | int | The decade the home was built in |
+| extras | float | Sum of the home's bathrooms, bedrooms, stories, pool, and if it has a garage |
+| garage | int | Sum of square feet in the garage |
 | half_bath | int | 1 if the home has a half bath, 0 if not |
-| lat | flaot | The home's geographical latitude |
+| lat | float | The home's geographical latitude |
+| lat_long | float | The home's latitude divided by its longitude |
 | living_space | float | The home area in sqft minus 132sqft per bedroom and 40sqft per bathroom (average sqft per respective room) |
 | location | object | The human-readable county name the home is in |
 | long | float | The home's geographical longitude |
 | los_angeles | int | 1 if the home is in Los Angeles County, 0 if not | 
 | lot_size | float | Sum of square feet of the piece of land the home is on |
 | orange | int | 1 if the home is in Orange County, 0 if not |
+| pool | int | 1 if the home has a pool, 0 if not |
+| stories | int | Count of how many levels or stories the home has |
 | ventura | int | 1 if the home is in Ventura County, 0 if not|
 | yard_size | float | The lot size minus the home area in sqft |
 | year_built | float | The year the home was built |
@@ -233,28 +238,33 @@ Baseline Results
 | zipcode |  |
 | lat |  |
 | long |  |
+| lat_long |  |
 | los_angeles |  |
 | orange |  |
 | ventura |  |
 | living_space |  |
 | half_bath |  |
+| pool |  |
+| stories |  |
+| garage |  |
+| extras |  |
 
 ### Modeling Results:
-| Model | RMSE (dollars) | R<sup>2</sup>  |
-| ---- | ----| ---- |
-| Baseline | 235,784 | 0 |
-| LarsLasso alpha=1 | 204,569 | 0.24736	|
-| Quadratic Linear Regression | 199,082 | 0.287247 |
-| Cubic Linear Regression | 199,712 | 0.282751 |
+| Model | RMSE Train (dollars) | R<sup>2</sup> Train | RMSE Validate (dollars) | R<sup>2</sup> Validate |
+| ---- | ---- | ---- | ---- | ---- |
+| Baseline | 235,784 | 0 | 235,784 | 0 |
+| LarsLasso alpha=1 | 206,664 | 0.257 | 203,881 | 0.252 |
+| Quadratic Linear Regression | 198,529 | 0.314 | 196,592 | 0.305 |
+| Cubic Linear Regression | 190,497 | 0.369 | 194,693 | .319 |
 
 The Quadratic Linear Regression model minimized RMSE the most.
 
 ### Testing the Model:
 | Model | RMSE (dollars) | R<sup>2</sup> |
 | ---- | ---- | ---- |
-| Train | 202,457 | 0.286745 |
-| Validate | 199,712 | 0.282751 |
-| Test | 207,287 | 0.271170 |
+| Train | 198,529 | 0.314 |
+| Validate | 196,592 | 0.305 |
+| Test | 203,822 | 0.295 |
 
 -----
 ## Conclusion:

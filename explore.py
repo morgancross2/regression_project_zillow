@@ -57,31 +57,64 @@ def select_sfs(X_train, y_train, k_features):
     
     
 def question1_viz(train):
+    ''' 
+    This function takes in the train dataset and outputs the visualization for question 1 
+    in the zillow regression project addressing home area and home value.
+    '''
+    # make it big
     plt.figure(figsize=(12,8))
-    sns.histplot(data=train, x='value')
+    # make it
+    sns.histplot(data=train, x='value', color='#BC544B', alpha=.5)
+    middle = train.value.median()
+    plt.axvline(x=middle, color='red', linestyle='--')
+    plt.text(340000, 1100, '''Median Home Value''')
+    # put a title and axis labels
     plt.title('Distribution of Home Values')
+    plt.xlabel('Home Value ($)')
+    plt.ylabel('Count of Homes')
+    # fix the axis tick labeling
+    plt.xticks(ticks = [0,200000,400000,600000,800000,1000000], labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    # show it on the screen
     plt.show()
     
     print()
     
+    # make it big
     plt.figure(figsize=(12,8))
-
+    # make them both
     sns.histplot(data=train[train.area > train.area.median()], x='value')
     sns.histplot(data=train[train.area <= train.area.median()], x='value', color='#3f6f21')
-
+    # make lines marking the median area value for each group of homes
     above = train[train.area > train.area.median()].value.median()
     plt.axvline(x=above, color='darkblue', linestyle='--')
+    plt.text(430000, 975, '''Median Value for
+Area Above Median''')
     below = train[train.area <= train.area.median()].value.median()
     plt.axvline(x=below, color='darkgreen', linestyle='--')
+    plt.text(60000, 975, '''    Median Value for 
+Area Below Median''')
+
+    # make a line marking the median area of all homes
     middle = train.value.median()
     plt.axvline(x=middle, color='red', linestyle='--')
-
+    # fix the axis tick labeling
+    plt.xticks(ticks = [0,200000,400000,600000,800000,1000000], labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    # give it a title and axis labels
     plt.title('More Space has More Value')
+    plt.xlabel('Home Value ($)')
+    plt.ylabel('Count of Homes')
+    # show it on the screen
     plt.show()
     
 
 def question2_viz(train):
+    ''' 
+    This function takes in the train dataset and outputs the visualizations for question 2 
+    in the zillow regression project addressing bathroom count, bedroom count, and home value.
+    '''
+    # make it big
     plt.figure(figsize=(12,8))
+    # plot each bathroom count with a line marking the median home value of that group
     sns.histplot(data=train[train.beds == 0], x='value', label = '0 bedrooms', color='#eef6ec')
     plt.axvline(x=train[train.beds == 0].value.median(), color='#eef6ec', linestyle='--')
     sns.histplot(data=train[train.beds == 1], x='value', label = '1 bedroom', color='#7bc86c')
@@ -94,14 +127,25 @@ def question2_viz(train):
     plt.axvline(x=train[train.beds == 4].value.median(), color='#06373A', linestyle='--')
     sns.histplot(data=train[train.beds == 5], x='value', label = '5 bedrooms', color='black')
     plt.axvline(x=train[train.beds == 5].value.median(), color='black', linestyle='--')
-
+    
+    plt.text(500000, 650, '''The median value shifts higher 
+as bedroom count increases.''')
+    
+    # fix the axis tick labeling
+    plt.xticks(ticks = [0,200000,400000,600000,800000,1000000], labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    
+    # put a title on it, axis labels, add a legend, and show it on the screen
     plt.title('Value Increases as Number of Bedrooms Increases')
+    plt.xlabel('Home Value ($)')
+    plt.ylabel('Count of Homes')
     plt.legend()
     plt.show()
     
     print()
     
+    # make it big
     plt.figure(figsize=(12,8))
+    # plot each bathroom count with a line marking the median home value of that group
     sns.histplot(data=train[train.baths == 0], x='value', label = '0 bathrooms', color='#eef6ec')
     plt.axvline(x=train[train.baths == 0].value.median(), color='#eef6ec', linestyle='--')
     sns.histplot(data=train[train.baths == 1], x='value', label = '1 bathroom', color='#7bc86c')
@@ -115,62 +159,115 @@ def question2_viz(train):
     sns.histplot(data=train[train.baths == 5], x='value', label = '5 bathrooms', color='black')
     plt.axvline(x=train[train.baths == 5].value.median(), color='black', linestyle='--')
 
-
+    # fix the axis tick labeling
+    plt.xticks(ticks = [0,200000,400000,600000,800000,1000000], labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    
+    plt.text(810000, 350, '''The median value shifts higher 
+as bathroom count increases.''')
+    
+    # put a title on it, axis labels, add a legend, and show it on the screen
     plt.ylim(0,700)
     plt.title('Value Increases as Number of Bathrooms Increases')
+    plt.xlabel('Home Value ($)')
+    plt.ylabel('Count of Homes')
     plt.legend()
     plt.show()
     
     
 def question2b_viz(train):
+    ''' 
+    This function takes in the train dataset and outputs the visualizations for question 2b 
+    in the zillow regression project addressing the relationship between bedrooms and 
+    bathrooms.
+    '''
+    # make it big
     plt.figure(figsize=(12,8))
-
+    # plot it
     sns.kdeplot(data=train, x='beds', y='baths')
+    # zoom in to what's important
     plt.xlim(0,7)
     plt.ylim(0,5)
+    # add the arrow to show trend
     plt.arrow(1.9,.4,3,3, head_width=.2, color='red')
     
+    # put a title on it and show it on the screen
     plt.title('Bathrooms and Bedrooms Most Often Increase Together')
+    plt.xlabel('Bedrooms')
+    plt.ylabel('Bathrooms')
     plt.show()
     
 
 def question3_viz(train):
+    ''' 
+    This function takes in the train dataset and outputs the visualizations for question 3 
+    in the zillow regression project addressing location and home value.
+    '''
+    # create bins for the home values
     train['brackets'] = pd.cut(train.value, 10, labels=[1,2,3,4,5,6,7,8,9,10])
-    
+    # make it big
     plt.figure(figsize=(12,8))
+    # plot it
     sns.histplot(data=train, x='year_built', alpha=.8, hue='location',hue_order=['Ventura', 'Orange', 'Los Angeles'])
+    # add lines marking the average year built at each location
     plt.axvline(x=train[train.location == 'Los Angeles'].year_built.mean(), color='green', linestyle='--')
     plt.axvline(x=train[train.location == 'Orange'].year_built.mean(), color='orange', linestyle='--')
     plt.axvline(x=train[train.location == 'Ventura'].year_built.mean(), color='blue', linestyle='--')
+    # put a title on it and show it on the screen
     plt.title('Los Angeles is Older than Other Locations')
+    plt.xlabel('Year Home was Built')
+    plt.ylabel('Count of Homes')
     plt.show()
     
     print()
     
+    # make it big
     plt.figure(figsize=(12,8))
+    # plot it
     sns.histplot(data=train, x='value', alpha=.8, hue='location', hue_order=['Ventura', 'Orange', 'Los Angeles'])
+    # add lines marking the median value at each location
     plt.axvline(x=train[train.location == 'Los Angeles'].value.median(), color='green', linestyle='--')
     plt.axvline(x=train[train.location == 'Orange'].value.median(), color='orange', linestyle='--')
     plt.axvline(x=train[train.location == 'Ventura'].value.median(), color='blue', linestyle='--')
+    
+    # fix the axis tick labeling
+    plt.xticks(ticks = [0,200000,400000,600000,800000,1000000], labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    
+    # put a title on it and show it on the screen
     plt.title('Los Angeles is Cheaper than Other Locations')
+    plt.xlabel('Home Value ($)')
+    plt.ylabel('Count of Homes')
     plt.show()
     
     print()
     
+    # make it big
     plt.figure(figsize=(12,12))
+    # plot it
     sns.scatterplot(data=train, x='long', y='lat', hue='location', hue_order=['Ventura', 'Orange', 'Los Angeles'])
+    # put a title on it and show it on the screen
     plt.title('Visualization of Homes in County Lines')
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
     plt.show()
     
     print()
     
+    # make it big
     plt.figure(figsize=(12,12))
+    # plot it
     sns.scatterplot(data=train, x='long', y='lat', hue='brackets', palette='rocket_r')
+    # put a title on it and show it on the screen
     plt.title('Los Angeles has Large Pocket of Low Value Homes')
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
     plt.show()
 
 
 def hyp1_test(train):
+    ''' 
+    This function takes in the train dataset and outputs the T-Test results for hypothesis 1
+    in the zillow regression project addressing home value of homes with above vs below median area.
+    '''
     # Create the samples
     area_above = train[train.area > train.area.median()].value
     area_below = train[train.area <= train.area.median()].value
@@ -197,6 +294,11 @@ Findings sugget there is more value in homes with below median area than homes w
         
         
 def hyp2_test(train):
+    ''' 
+    This function takes in the train dataset and outputs the T-Test results for hypothesis 2 
+    in the zillow regression project addressing home value of homes with above median 
+    bathrooms and below median bedrooms vs below median bathrooms and above median bedrooms.
+    '''
     # Create the samples
     baths_above = train[(train.baths > train.baths.median())&(train.beds < train.beds.median())].value
     baths_below = train[(train.baths < train.baths.median())&(train.beds > train.beds.median())].value
@@ -223,6 +325,10 @@ Findings suggest there is more value in homes with below median bathrooms and ab
         
         
 def hyp2b_test(train):
+    ''' 
+    This function takes in the train dataset and outputs the Chi-Square results for hypothesis 2b
+    in the zillow regression project addressing the relationship between bedroom and bathroom counts.
+    '''
     # Set alpha
     α = 0.05
 
@@ -244,6 +350,11 @@ Findings suggest there is not an association between bedrooms and bathrooms.''')
         
         
 def hyp3_test(train):
+    ''' 
+    This function takes in the train dataset and outputs the T-Test results for hypothesis 3
+    in the zillow regression project addressing home value of homes in Los Angeles against
+    homes in Orange or Ventura.
+    '''
     # Create the samples
     LA_homes = train[train.location == 'Los Angeles'].value
     VenturaOrange_homes = train[(train.location == 'Orange')|(train.location == 'Ventura') ].value
