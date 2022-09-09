@@ -41,7 +41,7 @@ Key Findings:
 
 Takeaways:
  - More in home features and/or quality of life by location data would greatly improve the model. 
- - My best model, Quadratic Linear Regression, only reduced the baseline error by \\$30,000 or 13% of total baseline error. 
+ - My best model, Quadratic Linear Regression, only reduced the baseline error by \$30,000 or 13% of total baseline error. 
 
 Recommendations:
 - Develop a flow of how a home is assessed. Home tax value assessors have a policy and procedure they must follow. Being able to use their assessment process in predicting this value would be essential to building better models moving forward.
@@ -220,9 +220,9 @@ Results:
 
 ### Baseline:
 Baseline Results
-- The baseline model was built off of the train dataset's mean for home value at \\362,670.
-- The baseline R^2 is 0.
-- The baseline RMSE is \\$235,784.
+- The baseline model was built off of the train dataset's mean for home value at \$362,670.
+- The baseline R<sup>2</sup> is 0.
+- The baseline RMSE is \$235,784.
 
 | Features Kept | Features Dropped |
 | ---- | ---- |
@@ -240,7 +240,7 @@ Baseline Results
 | half_bath |  |
 
 ### Modeling Results:
-| Model | RMSE (dollars) | R^2  |
+| Model | RMSE (dollars) | R<sup>2</sup>  |
 | ---- | ----| ---- |
 | Baseline | 235,784 | 0 |
 | LarsLasso alpha=1 | 204,569 | 0.24736	|
@@ -250,7 +250,7 @@ Baseline Results
 The Quadratic Linear Regression model minimized RMSE the most.
 
 ### Testing the Model:
-| Model | RMSE (dollars) | R^2 |
+| Model | RMSE (dollars) | R<sup>2</sup> |
 | ---- | ---- | ---- |
 | Train | 202,457 | 0.286745 |
 | Validate | 199,712 | 0.282751 |
@@ -258,7 +258,7 @@ The Quadratic Linear Regression model minimized RMSE the most.
 
 -----
 ## Conclusion:
-Home value is assessed through a myraid of metrics taken about the home. Location and area based information is the most valuable, but it is not enough. My best model only reduced the root mean squared error by \\$35,000 from the baseline. The model's error of \\$200,000  still covers most of a standard deviation and is not a good model to use in production.
+Home value is assessed through a myraid of metrics taken about the home. Location and area based information is the most valuable, but it is not enough. My best model only reduced the root mean squared error by \$35,000 from the baseline. The model's error of \$200,000  still covers most of a standard deviation and is not a good model to use in production.
 
 #### Recommendations: 
 - Add data or begin tracking school ratings and crime ratings for each neighborhood. I predict sections of homes with high school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
