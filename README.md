@@ -1,7 +1,7 @@
 # Zillow Regression Project
 by: Morgan Cross
 
-This project is designed to identify key features and build a regression model that best predicts home cost. 
+This project is designed to identify key features and build a regression model to best predict a home's tax assessed value. This report will interchagably use 'cost' or 'value' to refer to a home's tax assessed value.  
 
 -----
 ## Project Overview:
@@ -31,55 +31,47 @@ This project is designed to identify key features and build a regression model t
 -----
 ## Executive Summary:
 Goals:
-- Identify drivers of home cost
-- Build a model to best predict single family residence cost
-- Minimize Root Square Mean Error (RSME) in order to best predict home cost
+- Identify drivers of home value
+- Build a model to best predict single family residence value
+- Minimize Root Square Mean Error (RSME) in order to best predict home value
 
 Key Findings:
-
+- Location data and inside the home area data is the most impactful for predicting home value. 
+- All models (LarLasso, Quadratic Linear Regression, Cubic Linear Regression) predicted home value better than the baseline, but not by much.
 
 Takeaways:
- 
+ - More in home features and/or quality of life by location data would greatly improve the model. 
+ - My best model, Quadratic Linear Regression, only reduced the baseline error by \\$30,000 or 13% of total baseline error. 
 
-Recommendation:
+Recommendations:
+- Develop a flow of how a home is assessed. Home tax value assessors have a policy and procedure they must follow. Being able to use their assessment process in predicting this value would be essential to building better models moving forward.
+- Track assigned school ratings and nearby crime rates. These features directly impact quality of life for most single family residence buyers. 
 
 -----
 ## Data Dictionary:
 | Target | Type | Description |
 | ---- | ---- | ---- |
-| churn | int | 0 if the customer is still with the company, 1 if they have left/churned |
+| value | int | The assessed tax value amount of the home |
+
 
 | Feature Name | Type | Description |
 | ---- | ---- | ---- |
-| Bank transfer (automatic) | int | 0 if the customer does not use bank transfering, 1 if they do |
-| contract_type | int | 12 for month-to-month contract, 1 for 1 year contract, 2 for 2 year contract |
-| contract_type_id | int | foreign key to contract_type |
-| Credit card (automatic) | int | 0 if the customer does not use a credit card, 1 if they do |
-| customer_id | object | individual customer identifier |
-| dependents | int | 0 if the customer does not have dependents, 1 if they do |
-| device_protection | int | 0 if the customer does not have device protection, 1 if they do |
-| DSL | int | 0 if the customer does not have DSL, 1 if they do |
-| Electronic check | int | 0 if the customer does not use electronic checks, 1 if they do |
-| extras | int | count of add-on services the customer is subscribed to (online security, online backup, device protection, tech support, streaming tv, streaming movies) | 
-| Fiber optic | int | 0 if the customer does not have fiber optic, 1 if they do |
-| gender | int | 0 if the customer is female, 1 if they are male |
-| internet_service_type_id | int | foreign key to internet_service_type |
-| Mailed check | int | 0 if the customer does not use mailed checks, 1 if they do |
-| monthly_charges | float | price of monthly services charged to the customer each month |
-| multiple_lines | int | 0 if the customer does not have any lines, 1 if they have one line, 2 if they have two or more lines |
-| online_backup | int | 0 if the customer does not have online backup, 1 if they do |
-| online_security | int | 0 if the customer does not have online security, 1 if they do |
-| paperless_billing | int | 0 if customer does not have paperless billing, 1 if they do |
-| partner | int | 0 if the customer does not have a partner, 1 if they do |
-| payment_type | object | This feature gets broken down into: bank transfer, credit card, electronic check, and mailed check |
-| payment_type_id | int | foreign key to payment_type |
-| phone_service | int | 0 if the customer does not have phone service, 1 if they do |
-| senior_citizen | int | 0 for non-senior citizen customers, 1 for senior citizens |
-| streaming_movies | int | 0 if the customer does not have streaming movies, 1 if they do |
-| streaming_tv | int | 0 if the customer does not have streaming tv, 1 if they do |
-| tech_support | int | 0 if the customer does not have tech support, 1 if they do |
-| tenure | int  | years customer has been with telco |
-| total_charges | float | sum of all charges over the tenure of the customer |
+| area | float | Sum of square feet in the home |
+| baths | float | Count of bathrooms in the home |
+| beds | float | Count of bedrooms in the home |
+| decade | int | The decade the home was built in |
+| half_bath | int | 1 if the home has a half bath, 0 if not |
+| lat | flaot | The home's geographical latitude |
+| living_space | float | The home area in sqft minus 132sqft per bedroom and 40sqft per bathroom (average sqft per respective room) |
+| location | object | The human-readable county name the home is in |
+| long | float | The home's geographical longitude |
+| los_angeles | int | 1 if the home is in Los Angeles County, 0 if not | 
+| lot_size | float | Sum of square feet of the piece of land the home is on |
+| orange | int | 1 if the home is in Orange County, 0 if not |
+| ventura | int | 1 if the home is in Ventura County, 0 if not|
+| yard_size | float | The lot size minus the home area in sqft |
+| year_built | float | The year the home was built |
+| zipcode | float | The US postal service 5-digit code for the home's location |
 
 -----
 ## Planning
@@ -102,33 +94,45 @@ Recommendation:
 Files used:
  - wrangle.py
 
-
-
-
-
-
-
-
-
-
- # EDIT ALL OF BELOW
-
 Steps taken:
- - I utilized my get_telco_data function from my acquire.py file. This function gathers the data from the Telco schema in the CodeUp database via an SQL query.
- - In this step, I called prep_telco from my prepare.py file. This function 
-    - handles nulls
-    - drops the foreign id columns
-    - casts monetary columns to floats
-    - enumerates columns's data for ease of exploration and modeling (See Data Dictionary above or in README for details.)
- - I feature engineered a column named 'extras'. This column contains a count of all add-on subscriptions customers may add. The amount of extras may play a role in churn. More to be explored in the next step. 
- - Before moving to exploration, I split the data into train (60%), validatev(20%), and test (20%) datasets; these were stratified for the target: churn.
+In this step, I started by calling my acquire_zillow function from wrangle.py. This function:
+- grabs the data from the CodeUp database via a SQL query
+- creates a local CSV of the table, if not already saved locally
+
+Next, I called my prepare_zillow function from wrangle.py. This funciton:
+- renames columns
+- handles nulls and outliers
+- feature engineers
+- splits the data into train, validate, and test datasets
+- creates a scaled DataFrame pre-set for modeling later
 
 What happened to each feature?
-- internet_service_type_id, payment_type_id, and contract_type_id were dropped because they are foreign keys to other features that were merged to the table via the initial acquire query. 
-- total_charges with no entry were corrected to reflect 0. This feature was then casted into a float.
-- internet_service_type and payment_type were transformed via dummies. This change displays the categorical options for each feature in their own boolean-like columns with 1 for True and 0 for False.
-- contract_type, gender, partner, dependents, phone_service, paperless_billing, churn, multiple_lines, online_security, online_backup, device_protection, tech_support, streaming_tv, and streaming_movies features were transformed to display 1 for True and 0 for False in place of 'Yes' or 'No'.
+- columns are renamed to be more human readable
+- drops all homes with missing data
+- creates dummies for the counties (Los Angeles, Orange, and Ventura)
+- removes outliers for lot_size, value, and area using quantiles (see prepare_zillow in wrangle.py for specifics)
+- removes a single zipcode outlier
+- feature engineers:
+    - decade -> bins year_built into 10 year segments
+    - yard_size -> subtracts home area from the lot size
+    - living_space -> subtract the average bedroom size and bathroom size from the home area
+    - half_bath -> creates a True/False (1/0) tag for homes with a half bathroom
+- The following features were scaled using the MinMaxScaler:
+    - beds
+    - baths
+    - area
+    - lot_size
+    - year_built
+    - zipcode
+    - yard_size
+    - living_space
+    - half_bath
 
+Takeaways:
+- I feature engineered yard_size and living_space to better assess the aspect ratio of these features. More yard or living area may play a role in home value. 
+- I feature engineered decades for the purpose of visualization during explore
+- I feature engineered half_bath to isolate homes with this feature. 
+- Before moving to exploration, I split the data into train, validate, and test datasets. Lastly, I created scaled versions of these datasets in preparation for modeling.
 
 -----
 ## Data Exploration
@@ -136,60 +140,79 @@ Files used:
 - explore.py
 
 Questions Addressed:
-1. Do monthly charges have a relationship with churn?
-2. Is fiber optic a driver of churn?
-3. How does tenure effect churn?
+1. Do larger homes have more value?
+2. Is there more value in bedrooms or bathrooms?
+3. Is the amount of bedrooms and bathrooms related?
+4. What is location's role in a home's value?
 
-### Test 1: T-Test - Churned monthly charges vs Non-churned monthly charges
+### Test 1: T-Test - Above Median Home Area Value vs Below Median Home Area Value
 - A T-Test evaluates if there is a difference in the means of two continuous variables. This test is looking at a two samples and one tail.
 - This test returns a p-value and a t-statistic.
-- This test will compare the monthly charges of customers that have churned against the monthly charges of customers that have not churned.
+- This test will compare the mean value of homes under the median area and the mean value of homes above the median area.
 - Confidence level is 95%
 - Alpha is 0.05
 
 Hypothesis:
- - The null hypothesis is the mean of monthly charges for churned customers is less than or equal to the mean of customers that have not churned.
- - The alternate hypothesis is the mean of monthly charges for churned customers greater than the mean of customers that have not churned.
+ - The null hypothesis is homes with above median area have less than or equal value to homes with below median area.
+ - The alternate hypothesis is homes with above median area have greater value to homes with below median area.
 
 Results: 
 - p-value is less than alpha
 - t-statistic is positive
-- I rejected the Null Hypothesis, suggesting the mean of monthly charges for churned customers is greater than those that have not churned.
+- I rejected the Null Hypothesis, suggesting there is more value in homes with above median area than homes with below median area.
 
-### Test 2: Chi-Square - Fiber optic vs Churn
-- This test evaluates if there is an association between two categorical variables.
-- This test returns a chi2-value, a p-value, the degrees of freedom, and the expected outcome.
-- This test will compare the fiber optic feature and the churn feature.
+### Test 2: T-Test - Above Median Bathrooms/Below Median Bedrooms Home Value vs. Below Median Bathrooms/Below Median Bedrooms Home Value
+- A T-Test evaluates if there is a difference in the means of two continuous variables. This test is looking at a two samples and one tail.
+- This test returns a p-value and a t-statistic.
+- This test will compare the mean value of homes with above median bathrooms and below median bedrooms against the mean value of homes with below median bathrooms and above median bedrooms.
 - Confidence level is 95%
 - Alpha is 0.05
 
 Hypothesis:
-- The null hypothesis is there is no association between a customer having fiber optic and a customer churning.
-- The alternative hypothesis is there is an association between a customer having fiber optic and a customer churning.
+ - The null hypothesis is homes with above median bathrooms and below median bedrooms have lower or equal value than homes with below median bathrooms and above median bedrooms.
+ - The alternate hypothesis is homes with above median bathrooms and below median bedrooms have greater value than homes with below median bathrooms and above median bedrooms.
 
 Results: 
 - p-value is less than alpha
-- I rejected the Null Hypothesis, suggesting there is an association between a customer having fiber optic and churning.
+- t-statistic is positive
+- I rejected the Null Hypothesis, suggesting there is more value in homes with above median bathrooms and below median bedrooms than homes with below median bathrooms and above median bedrooms.
 
-### Test 3: Chi-Square - Tenure vs Churn
+### Test 3: Chi-Square - Bedrooms vs. Bathrooms
 - This test evaluates if there is an association between two categorical variables.
 - This test returns a chi2-value, a p-value, the degrees of freedom, and the expected outcome.
-- This test will compare the tenure feature and the churn feature.
+- This test will compare the count of bedrooms and the count of bathrooms.
 - Confidence level is 95%
 - Alpha is 0.05
 
 Hypothesis:
-- The null hypothesis is there is not an association between tenure and churn.
-- The alternative hypothesis is there is an association between tenure and churn.
+- The null hypothesis is there is no association between count of bedrooms and count of bathrooms.
+- The alternative hypothesis is there is an association between count of bedrooms and count of bathrooms.
 
 Results: 
 - p-value is less than alpha
-- I rejected the Null Hypothesis, suggesting there is an association between tenure and churn.
+- I rejected the Null Hypothesis, suggesting there is an association between count of bedrooms and count of bathrooms.
+
+### Test 4: T-Test - Los Angeles Home Value vs. Orange and Ventura Home Value
+- A T-Test evaluates if there is a difference in the means of two continuous variables. This test is looking at a two samples and one tail.
+- This test returns a p-value and a t-statistic.
+- This test will compare the mean value of homes with above median bathrooms and below median bedrooms against the mean value of homes with below median bathrooms and above median bedrooms.
+- Confidence level is 95%
+- Alpha is 0.05
+
+Hypothesis:
+ - The null hypothesis is the value mean of Los Angeles homes is greater than or equal to the value mean of Ventura and Orange homes.
+ - The alternate hypothesis is the value mean of Los Angeles homes is less than the value mean of Ventura and Orange homes.
+
+Results: 
+- p-value is less than alpha
+- t-statistic is negative
+- I rejected the Null Hypothesis, suggesting there is less value in Los Angeles homes compared to Ventura and Orange homes.
 
 ### Takeaways from exploration:
-- Increased monthly charges, having fiber optic, and early in tenure all lead to higher rates of churn. 
-- A disporportionatly high number of customers that churn, have fiber optic when compared to customers that do not churn. 
-- When controling for tenure, this theme continues. More fiber optic customers churn than non-fiber optic customers. 
+- There is more value in homes with above median area.
+- There is more value in homes with above median bathrooms and below median bedrooms than the opposite. 
+- There is an association between bedrooms and bathrooms.
+- There is less value in Los Angeles homes than in Orange or Ventura.
 
 -----
 ## Modeling:
@@ -197,65 +220,62 @@ Results:
 
 ### Baseline:
 Baseline Results
-- Train churn feature's mode is 0, not churning.
-- The baseline accuracy is 73.47%.
+- The baseline model was built off of the train dataset's mean for home value at \\362,670.
+- The baseline R^2 is 0.
+- The baseline RMSE is \\$235,784.
 
-Selected features to input into models:
-- contract_type
-- Fiber optic
-- DSL
-- monthly_charges
-- paperless_billing
-- senior_citizen
-- tenure
-- extras
+| Features Kept | Features Dropped |
+| ---- | ---- |
+| baths | location |
+| beds | decade |
+| area | yard_space |
+| lot_size |  |
+| zipcode |  |
+| lat |  |
+| long |  |
+| los_angeles |  |
+| orange |  |
+| ventura |  |
+| living_space |  |
+| half_bath |  |
 
-#### Model 1: Logistic Regression
-- Hyperparameters: C = 1.0, frequency = 0.3, random_state = 123
+### Modeling Results:
+| Model | RMSE (dollars) | R^2  |
+| ---- | ----| ---- |
+| Baseline | 235,784 | 0 |
+| LarsLasso alpha=1 | 204,569 | 0.24736	|
+| Quadratic Linear Regression | 199,082 | 0.287247 |
+| Cubic Linear Regression | 199,712 | 0.282751 |
 
-#### Model 2: Random Forest
-- Hyperparameters: max_depth = 7, min_samples_leaf = 3, random_state = 123
-
-#### Model 3: K-Nearest Neighbors
-- Hyperparameters: n_neighbors = 5, weights = uniform
-
-### Selecting the Best Model:
-| Model | Train Accuracy | Validate Accuracy | Train Recall | Validate Recall |
-| ---- | ----| ---- | ---- | ---- |
-| Baseline | .734675 | .734564 | n/a | n/a |
-| Logistic Regression | 0.752426 | 0.765791	| 0.742194 | 0.783422 |
-| Random Forest | 0.817278 | 0.808375 | 0.533452 | 0.516043 |
-| K-Nearest Neighbors | 0.840237 | 0.776437 | 0.624442 | 0.524064 | 
-
-The Logistic Regression model performed the best for recall.
+The Quadratic Linear Regression model minimized RMSE the most.
 
 ### Testing the Model:
-| Model | Test Accuracy | Test Recall |
+| Model | RMSE (dollars) | R^2 |
 | ---- | ---- | ---- |
-| Logistic Regression | 0.759404 | 0.778075 |
+| Train | 202,457 | 0.286745 |
+| Validate | 199,712 | 0.282751 |
+| Test | 207,287 | 0.271170 |
 
 -----
 ## Conclusion:
-Throughout customers' tenure, fiber optic customers are consistently churning at a higher rate. It is even more prevelent that this feature that should be addressed because my model is predicting churn with 78% recall and is weighing fiber optic at 2.78, almost twice the next highest feature in its decision function. 
+Home value is assessed through a myraid of metrics taken about the home. Location and area based information is the most valuable, but it is not enough. My best model only reduced the root mean squared error by \\$35,000 from the baseline. The model's error of \\$200,000  still covers most of a standard deviation and is not a good model to use in production.
 
 #### Recommendations: 
- - Conduct research on other fiber optic providers. There is likely a competitor providing this service to customers faster, better, or cheaper.
- - Add data or begin tracking customers' location of service. Customers may be able to sign up even if fiber optic is not available in their area. Service outages causing churn may be geographically clustered. 
- - Evaluate fiber optic customers' experience early and often. Themes in this customer feeback could point the company in a direction to better deter churn. 
+- Add data or begin tracking school ratings and crime ratings for each neighborhood. I predict sections of homes with high school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
+- Develop a flow of how a home is assessed. Home tax value assessors have a policy and procedure they must follow. Being able to use their assessment process in predicting this value would be essential to building better models moving forward. 
 
 #### Next Steps:
- - Feature engineer sample populations where the cluster of churn is at for a combination of features. Example: isolate customers with low-tenure and high monthly charges, add an identifier for this group, and see how this additional identifier adjusted the model outcomes. 
- - Feature engineer data to show the last added on service before churn and the difference in dates between the addition and churning. This information could shed light on a specific service lowering customer satisfaction.
- - Develop a model focused on targeted marketing for predicted churning customers.
+- Add other home features such as pool, garage, stories, and fireplaces. These variables could greatly impact the value of a home.
+- Feature engineer more detailed depictions of the use of the area inside the home. Specifically determine the kitchen vs living area sections of the home and see how this effects the model.
+- Develop a model using different machine learning techniques focused on geographical distance. Home value is often geographically clusered as depicted in our finidngs. 
 
 -----
 ## How to Recreate:
 1. Utilize the following files found in this repository:
 - final_report.ipynb
-- acquire.py
-- prepare.py
+- wrangle.py
 - explore.py
-- model.py
+- evaluate.py
 
 2. To access the data, you will need credentials to access to the CodeUp database saved in an env.py file.
 Create your personal env.py file with your credentials saved as strings. (user, password, host)
