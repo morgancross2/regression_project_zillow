@@ -31,21 +31,22 @@ This project is designed to identify key features and build a regression model t
 -----
 ## Executive Summary:
 Goals:
-- Identify drivers of home value
-- Build a model to best predict single family residence value
-- Minimize Root Square Mean Error (RSME) in order to best predict home value
+- Identify factors evaluated in home value
+- Build a model to best predict home value
+- Minimize Root Square Mean Error (RMSE) in modeling
 
 Key Findings:
-- Location data and inside the home area data is the most impactful for predicting home value. 
-- All models (LarLasso, Quadratic Linear Regression, Cubic Linear Regression) predicted home value better than the baseline, but not by much.
+- Location data and use of home square-footage is the most impactful for predicting home value. 
+- Adding a bathroom increases home value more than adding a bedroom. 
+- All models (LarLasso, Quadratic Linear Regression, Cubic Linear Regression) predicted home value better than the baseline.
 
 Takeaways:
  - More in home features and/or quality of life by location data would greatly improve the model. 
- - My best model, Quadratic Linear Regression, only reduced the baseline error by \$30,000 or 13% of total baseline error. 
+ - My best model, Quadratic Linear Regression, only reduced the baseline error by \\$30,000 or 13% of total baseline error. 
 
 Recommendations:
-- Develop a flow of how a home is assessed. Home tax value assessors have a policy and procedure they must follow. Being able to use their assessment process in predicting this value would be essential to building better models moving forward.
-- Track assigned school ratings and nearby crime rates. These features directly impact quality of life for most single family residence buyers. 
+- Evaluate data that tax value assessors use in their assessment. They have a policy and procedure they must follow, and being able to use their process in predicting home value would be essential to building better models moving forward.
+- Track assigned school ratings and nearby crime rates. These features directly impact quality of life for most single family residence buyers.  
 
 -----
 ## Data Dictionary:
@@ -268,14 +269,13 @@ The Quadratic Linear Regression model minimized RMSE the most.
 
 -----
 ## Conclusion:
-Home value is assessed through a myraid of metrics taken about the home. Location and area based information is the most valuable, but it is not enough. My best model only reduced the root mean squared error by \$35,000 from the baseline. The model's error of \$200,000  still covers most of a standard deviation and is not a good model to use in production.
+Home value is assessed through a myraid of metrics taken about the home. Location and area based information have proven the most valuable, but there is still room for improvement. My best model only reduced the root mean squared error by \\$35,000 from the baseline results; a 13% reduction in error.
 
-#### Recommendations: 
-- Add data or begin tracking school ratings and crime ratings for each neighborhood. I predict sections of homes with high school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
-- Develop a flow of how a home is assessed. Home tax value assessors have a policy and procedure they must follow. Being able to use their assessment process in predicting this value would be essential to building better models moving forward. 
+#### Recommendations:
+- Add data or begin tracking school rankings and crime rates for each neighborhood. I predict sections of homes with higher school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
+- Evaluate data that tax value assessors use in their assessment. They have a policy and procedure they must follow, and being able to use their process in predicting home value would be essential to building better models moving forward.
 
 #### Next Steps:
-- Add other home features such as pool, garage, stories, and fireplaces. These variables could greatly impact the value of a home.
 - Feature engineer more detailed depictions of the use of the area inside the home. Specifically determine the kitchen vs living area sections of the home and see how this effects the model.
 - Develop a model using different machine learning techniques focused on geographical distance. Home value is often geographically clusered as depicted in our finidngs. 
 
