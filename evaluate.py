@@ -141,7 +141,7 @@ def get_models_with_results(X_train, y_train, X_val, y_val):
 
     # save the results
     metrics = metrics.append({
-        'model': 'd2',
+        'model': 'Quadratic Linear Regression',
         'rmse_train': rmse_train,
         'r2_train': explained_variance_score(y_train.value, y_train.pred_lm2),
         'rmse_val': rmse_val,
@@ -162,7 +162,7 @@ def get_models_with_results(X_train, y_train, X_val, y_val):
 
     # save the results
     metrics = metrics.append({
-        'model': 'd3',
+        'model': 'Cubic Linear Regression',
         'rmse_train': rmse_train,
         'r2_train': explained_variance_score(y_train.value, y_train.pred_lm2),
         'rmse_val': rmse_val,
