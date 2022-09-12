@@ -67,7 +67,8 @@ def question1_viz(train):
     sns.histplot(data=train, x='value', color='#BC544B', alpha=.5)
     middle = train.value.median()
     plt.axvline(x=middle, color='red', linestyle='--')
-    plt.text(340000, 1100, '''Median Home Value''')
+    plt.text(340000, 1100, '''Median Home Value
+$328,000''')
     # put a title and axis labels
     plt.title('Distribution of Home Values')
     plt.xlabel('Home Value ($)')
@@ -88,11 +89,13 @@ def question1_viz(train):
     above = train[train.area > train.area.median()].value.median()
     plt.axvline(x=above, color='darkblue', linestyle='--')
     plt.text(430000, 975, '''Median Value for
-Area Above Median''')
+Area Above Median
+$419,000''')
     below = train[train.area <= train.area.median()].value.median()
     plt.axvline(x=below, color='darkgreen', linestyle='--')
     plt.text(60000, 975, '''    Median Value for 
-Area Below Median''')
+Area Below Median
+         $260,000''')
 
     # make a line marking the median area of all homes
     middle = train.value.median()
@@ -204,21 +207,6 @@ def question3_viz(train):
     '''
     # create bins for the home values
     train['brackets'] = pd.cut(train.value, 10, labels=[1,2,3,4,5,6,7,8,9,10])
-    # make it big
-    plt.figure(figsize=(12,8))
-    # plot it
-    sns.histplot(data=train, x='year_built', alpha=.8, hue='location',hue_order=['Ventura', 'Orange', 'Los Angeles'])
-    # add lines marking the average year built at each location
-    plt.axvline(x=train[train.location == 'Los Angeles'].year_built.mean(), color='green', linestyle='--')
-    plt.axvline(x=train[train.location == 'Orange'].year_built.mean(), color='orange', linestyle='--')
-    plt.axvline(x=train[train.location == 'Ventura'].year_built.mean(), color='blue', linestyle='--')
-    # put a title on it and show it on the screen
-    plt.title('Los Angeles is Older than Other Locations')
-    plt.xlabel('Year Home was Built')
-    plt.ylabel('Count of Homes')
-    plt.show()
-    
-    print()
     
     # make it big
     plt.figure(figsize=(12,8))
@@ -240,26 +228,21 @@ def question3_viz(train):
     
     print()
     
-    # make it big
-    plt.figure(figsize=(12,12))
+    fig, axes = plt.subplots(1, 2, sharex=True, figsize=(18,8))
+    fig.suptitle('Los Angeles has Pockets of Low Value Homes')
     # plot it
-    sns.scatterplot(data=train, x='long', y='lat', hue='location', hue_order=['Ventura', 'Orange', 'Los Angeles'])
+    sns.scatterplot(ax=axes[0], data=train, x='long', y='lat', hue='location', hue_order=['Ventura', 'Orange', 'Los Angeles'])
     # put a title on it and show it on the screen
-    plt.title('Visualization of Homes in County Lines')
-    plt.xlabel('Longitude')
-    plt.ylabel('Latitude')
-    plt.show()
-    
-    print()
-    
-    # make it big
-    plt.figure(figsize=(12,12))
+    axes[0].set_title('Homes by County')
+    axes[0].set_xlabel('Longitude')
+    axes[0].set_ylabel('Latitude')
+        
     # plot it
-    sns.scatterplot(data=train, x='long', y='lat', hue='brackets', palette='rocket_r')
+    sns.scatterplot(ax=axes[1], data=train, x='long', y='lat', hue='brackets', palette='rocket_r')
     # put a title on it and show it on the screen
-    plt.title('Los Angeles has Large Pocket of Low Value Homes')
-    plt.xlabel('Longitude')
-    plt.ylabel('Latitude')
+    axes[1].set_title('Homes by Value Bracket')
+    axes[1].set_xlabel('Longitude')
+    axes[1].set_ylabel('Latitude')
     plt.show()
 
 
