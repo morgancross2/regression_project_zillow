@@ -41,12 +41,11 @@ Key Findings:
 - All models (LarLasso, Quadratic Linear Regression, Cubic Linear Regression) predicted home value better than the baseline.
 
 Takeaways:
+ - My best model, Quadratic Linear Regression, only reduced the baseline error by \\$35,000 or 13% of total baseline error. 
  - More in home features and/or quality of life by location data would greatly improve the model. 
- - My best model, Quadratic Linear Regression, only reduced the baseline error by \\$30,000 or 13% of total baseline error. 
 
 Recommendations:
-- Evaluate data that tax value assessors use in their assessment. They have a policy and procedure they must follow, and being able to use their process in predicting home value would be essential to building better models moving forward.
-- Track assigned school ratings and nearby crime rates. These features directly impact quality of life for most single family residence buyers.  
+- Evaluate data that tax value assessors use in their assessment. They have a policy and procedure they must follow, and being able to use their process in predicting home value would be essential to building better models moving forward. 
 
 -----
 ## Data Dictionary:
@@ -268,14 +267,14 @@ The Quadratic Linear Regression model minimized RMSE the most.
 | Test | 203,822 | 0.295 |
 
 -----
-## Conclusion:
+## Conclusion
 Home value is assessed through a myraid of metrics taken about the home. Location and area based information have proven the most valuable, but there is still room for improvement. My best model only reduced the root mean squared error by \\$35,000 from the baseline results; a 13% reduction in error.
 
-#### Recommendations:
-- Add data or begin tracking school rankings and crime rates for each neighborhood. I predict sections of homes with higher school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
+### Recommendations:
 - Evaluate data that tax value assessors use in their assessment. They have a policy and procedure they must follow, and being able to use their process in predicting home value would be essential to building better models moving forward.
+- Add data or begin tracking school rankings and crime rates for each neighborhood. I predict sections of homes with higher school ratings and low crime rates will value for more than homes with low school ratings or high crime rates.
 
-#### Next Steps:
+### Next Steps:
 - Feature engineer more detailed depictions of the use of the area inside the home. Specifically determine the kitchen vs living area sections of the home and see how this effects the model.
 - Develop a model using different machine learning techniques focused on geographical distance. Home value is often geographically clusered as depicted in our finidngs. 
 
